@@ -22,12 +22,14 @@ function preload() {
     this.load.image('ground','assets/Background.jpg');
     this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 64, frameHeight: 64});
     this.load.spritesheet('peasant','assets/Peasant.png', {frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('squirrel','assets/squirrel.png', {frameWidth: 64, frameHeight: 64});
 }
 
 function create() {
     this.add.image(350,350,'ground');
     let center = this.add.sprite(350,350,'castle');
     let peasent = this.add.sprite(200,200,'peasant');
+    let squirrel = this.add.sprite(100,200, 'squirrel');
 }
 
 function update() {
