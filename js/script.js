@@ -20,7 +20,7 @@ let game = new Phaser.Game(config);
 
 function preload() {
     this.load.image('ground','assets/Background.jpg');
-    this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 128, frameHeight: 95});
     this.load.spritesheet('peasant','assets/Peasant.png', {frameWidth: 64, frameHeight: 64});
 }
 
