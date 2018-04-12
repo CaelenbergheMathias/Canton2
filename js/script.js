@@ -59,7 +59,7 @@ function create() {
 
     for (var i = 0; i < 10; i++)
     {
-        var x = Phaser.Math.Between(100, 3100);
+        var x = Phaser.Math.Between(100, 300);
         var y = Phaser.Math.Between(100, 300);
         squirrel = this.impact.add.sprite(x,y,'squirrel').play('randomMovement');
         squirrel.setLite().setBounce(1);
