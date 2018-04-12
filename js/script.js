@@ -108,7 +108,10 @@ function create() {
         repeat: -1
     };
     game.anims.create(configWalk);
-
+    game.anims.create({
+        key:'gameover',
+        frames: [{key: 'castle', frame: 1}]
+    })
     healthtext = this.add.text(16,16,'Health: 100', {fontsize: '32px', fill: '#FFF'});
     cursors = this.input.keyboard.createCursorKeys();
 }
@@ -121,11 +124,11 @@ function update() {
     if (cursors.left.isDown)
     {
 
-        ridder.setVelocityX(-800);
+        ridder.setVelocityX(-400);
         ridder.flipX = true;
     }
     else if (cursors.right.isDown) {
-        ridder.setVelocityX(800);
+        ridder.setVelocityX(400);
         ridder.flipX = false;
     }
     else {
@@ -133,10 +136,10 @@ function update() {
     }
 
     if (cursors.up.isDown) {
-        ridder.setVelocityY(-800);
+        ridder.setVelocityY(-400);
     }
     else if (cursors.down.isDown) {
-        ridder.setVelocityY(800);
+        ridder.setVelocityY(400);
     }
     else {
         ridder.setVelocityY(0);
@@ -147,6 +150,8 @@ function update() {
     }
     else {
     }
+
+
 }
 
 
@@ -161,7 +166,15 @@ function killsquirrel(ridder,squirrel) {
 }
 
 function damageCastle(squirrel,castle) {
-    castlehealth -= 5;
+    castlehealth -= 100;
+    healthtext.setText('health: '+castlehealth)
+    if(castlehealth<=0)
+    {
+        castle.anims.play('gameover');
+        
+
+    }
+
 }
 
 function ridderWalk() {
