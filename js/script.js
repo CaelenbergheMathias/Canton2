@@ -8,7 +8,7 @@ const config = {
         update: update
     },
     physics: {
-        default: 'impact',
+        default: 'arcade',
         impact: {
             setBounds:{
                 x:0,
@@ -25,14 +25,13 @@ const config = {
 };
 
 let game = new Phaser.Game(config);
-let knight;
 
 function preload() {
     this.load.image('ground','assets/Background.jpg');
     this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 128, frameHeight: 95});
     this.load.spritesheet('peasant','assets/Peasant.png', {frameWidth: 64, frameHeight: 64});
-    this.load.spritesheet('ridder','assets/Ridder.png', {frameWidth: 64, frameHeight: 64});
-    this.load.spritesheet('squirrel','assets/Squirrel.png', {frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('ridder','assets/Ridder.png', {frameWidth: 52, frameHeight: 58});
+    this.load.spritesheet('squirrel','assets/squirrel.png', {frameWidth: 64, frameHeight: 64});
 }
 // variable outside of create in order to use them in other functions
 var ridder;
@@ -41,17 +40,19 @@ var peasant;
 var cursors;
 var castle;
 var glory;
+let castlehealth = 100;
 
 function create() {
     //var bounds = new Phaser.Geom.Circle(100, 100, 400);
     this.add.image(350,350,'ground');
-    castle = this.impact.add.sprite(350,350,'castle');
-    castle.setTypeB().setCheckAgainstA().setFixed();
+    castle = this.physics.add.staticGroup();
+    castle.create(350,350,'castle')
 
-    ridder = this.impact.add.sprite(400,400,'ridder');
+
+    ridder = this.physics.add.sprite(400,400,'ridder');
     ridder.setActive();
-    //peasant = this.impact.add.sprite(300, 300, 'peasant').setActive().setBounce(1);
-    //squirrel = this.impact.add.sprite(250,200,'squirrel').setActive().setBounce(1);
+    ridder.setCollideWorldBounds(true);
+
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var config = {
@@ -61,22 +62,40 @@ function create() {
         repeat: -1
     };
     game.anims.create(config);
-
-    for (var i = 0; i < 10; i++)
+    squirrel = this.physics.add.group({
+        key: 'squirrel',
+        repeat: 11,
+        setXY: { x: 50, y: 50, stepX: 50 }
+    });
+    squirrel.children.iterate(function (child) {
+        child.setCollideWorldBounds(true);
+        child.play('randomMovement')
+        child.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));
+        child.setBounce(1);
+    })
+    /*for (var i = 0; i < 10; i++)
     {
-        var x = Phaser.Math.Between(50, 50);
-        var y = Phaser.Math.Between(50, 50);
-        squirrel = this.impact.add.sprite(Phaser.Math.Between(50, 100),Phaser.Math.Between(50, 100),'squirrel');
-        squirrel.play('randomMovement').setLite().setTypeA().setCheckAgainstB();
-        squirrel.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));
-        squirrel.vel.x = 350;
-        squirrel.vel.y = 350;
+        var x = Phaser.Math.Between(50, 650);
+        var y = Phaser.Math.Between(50, 650);;
+        squirrel = this.physics.add.sprite(x,y,'squirrel');
+        squirrel.play('randomMovement')
+        squirrel.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));*/
+        //squirrel.setBounce(1)
+        //squirrel.setCollideWorldBounds(true);
+        //this.physics.add.collider(ridder, squirrel);
+        this.physics.add.collider(squirrel,castle, damageCastle, null,this);
+        this.physics.add.collider(squirrel,squirrel);
+        this.physics.add.collider(ridder, squirrel, killsquirrel, null, this);
+
+
     
-    }
+    //}
+
+    //ridder.setCollideCallback(killsquirrel,this);
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var configAttack = {
         key: 'attack',
-        frames: game.anims.generateFrameNumbers('ridder', { start: 2, end: 7 }),
+        frames: game.anims.generateFrameNumbers('ridder', { start: 2, end: 6 }),
         frameRate: 10,
         repeat: 0
     };
@@ -90,12 +109,12 @@ function create() {
     };
     game.anims.create(configWalk);
 
+    healthtext = this.add.text(16,16,'Health: 100', {fontsize: '32px', fill: '#FFF'});
     cursors = this.input.keyboard.createCursorKeys();
 }
 
 
 function update() {
-
     if (!ridder.anims.isPlaying) {
         ridderWalk();
     }
@@ -123,6 +142,7 @@ function update() {
         ridder.setVelocityY(0);
     }
     if (cursors.space.isDown) {
+
         ridderAttack();
     }
     else {
@@ -134,6 +154,14 @@ function update() {
 function ridderAttack() {
 
     ridder.anims.play('attack');
+}
+
+function killsquirrel(ridder,squirrel) {
+    squirrel.disableBody(true,true);
+}
+
+function damageCastle(squirrel,castle) {
+    castlehealth -= 5;
 }
 
 function ridderWalk() {
