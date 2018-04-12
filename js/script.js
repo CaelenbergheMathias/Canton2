@@ -96,8 +96,7 @@ function create() {
 
 function update() {
 
-    if(!ridder.anims.isPlaying)
-    {
+    if (!ridder.anims.isPlaying) {
         ridderWalk();
     }
     if (cursors.left.isDown)
@@ -106,43 +105,38 @@ function update() {
         ridder.setVelocityX(-800);
         ridder.flipX = true;
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown) {
         ridder.setVelocityX(800);
         ridder.flipX = false;
     }
-    else
-    {
+    else {
         ridder.setVelocityX(0);
     }
 
-    if (cursors.up.isDown)
-    {
+    if (cursors.up.isDown) {
         ridder.setVelocityY(-800);
     }
-    else if (cursors.down.isDown)
-    {
+    else if (cursors.down.isDown) {
         ridder.setVelocityY(800);
     }
-    else
-    {
+    else {
         ridder.setVelocityY(0);
     }
-    if (cursors.space.isDown )
-    {
+    if (cursors.space.isDown) {
         ridderAttack();
     }
-    else{}
+    else {
+    }
 }
 
 
 //custom made functions ///////////////////////////////////
-function ridderAttack(){
+function ridderAttack() {
 
     ridder.anims.play('attack');
 }
 
-function ridderWalk(){
+function ridderWalk() {
 
     ridder.anims.play('walk');
 }
