@@ -22,11 +22,11 @@ const config = {
 };
 
 let game = new Phaser.Game(config);
-
+let knight;
 
 function preload() {
     this.load.image('ground','assets/Background.jpg');
-    this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('castle','assets/Kasteel.png', {frameWidth: 128, frameHeight: 95});
     this.load.spritesheet('peasant','assets/Peasant.png', {frameWidth: 64, frameHeight: 64});
     this.load.spritesheet('ridder','assets/Ridder.png', {frameWidth: 64, frameHeight: 64});
     this.load.spritesheet('squirrel','assets/Squirrel.png', {frameWidth: 64, frameHeight: 64});
