@@ -42,13 +42,41 @@ var glory;
 function create() {
     var bounds = new Phaser.Geom.Circle(100, 100, 400);
     this.add.image(350,350,'ground');
-    castle = this.impact.add.sprite(350,350,'castle');
+    castle = this.impact.add.sprite(350,350,'castle').setFixed();
     ridder = this.impact.add.sprite(200,200,'ridder').setActive();
-    //peasant = this.matter.add.sprite(300, 300, 'peasant').setActive().setBounce(1);
-    //squirrel = this.matter.add.sprite(250,200,'squirrel').setActive().setBounce(1);
+    //peasant = this.impact.add.sprite(300, 300, 'peasant').setActive().setBounce(1);
+    //squirrel = this.impact.add.sprite(250,200,'squirrel').setActive().setBounce(1);
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var config = {
+        key: 'randomMovement',
+        frames: game.anims.generateFrameNumbers('squirrel', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1
+    };
+
+    game.anims.create(config);
+
+    for (var i = 0; i < 10; i++)
+    {
+        var x = Phaser.Math.Between(100, 3100);
+        var y = Phaser.Math.Between(100, 300);
+        squirrel = this.impact.add.sprite(x,y,'squirrel').play('randomMovement');
+        squirrel.setLite().setBounce(1);
+        squirrel.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));
+
+        if (Math.random() > 0.5)
+        {
+            squirrel.vel.x *= -1;
+        }
+        else
+        {
+            squirrel.vel.y *= -1;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     ridderWalk();
-
-
     cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -111,5 +139,35 @@ function ridderWalk(){
     game.anims.create(config);
     ridder.anims.play('walk');
 }
+ /*
+function createSquirrels()
+{
 
+    var config = {
+        key: 'randomMovement',
+        frames: game.anims.generateFrameNumbers('squirrel', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1
+    };
 
+    game.anims.create(config);
+
+    for (var i = 0; i < 10; i++)
+    {
+        var x = Phaser.Math.Between(100, 3100);
+        var y = Phaser.Math.Between(100, 300);
+        squirrel = game.impact.add.sprite(x,y,'squirrel').play('randomMovement');
+        squirrel.setLite().setBounce(1);
+        squirrel.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));
+
+        if (Math.random() > 0.5)
+        {
+            squirrel.vel.x *= -1;
+        }
+        else
+        {
+            squirrel.vel.y *= -1;
+        }
+    }
+}
+*/
