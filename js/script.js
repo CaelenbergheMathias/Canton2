@@ -75,15 +75,36 @@ function create() {
         }
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var configAttack = {
+        key: 'attack',
+        frames: game.anims.generateFrameNumbers('ridder', { start: 2, end: 7 }),
+        frameRate: 10,
+        repeat: 0
+    };
+    game.anims.create(configAttack);
+    var configWalk = {
+        key: 'walk',
+        frames: game.anims.generateFrameNumbers('ridder', { start: 0, end: 1 }),
+        frameRate: 7,
+        repeat: -1
+    };
+    game.anims.create(configWalk);
 
-    ridderWalk();
     cursors = this.input.keyboard.createCursorKeys();
 }
 
 
 function update() {
+
+    if(!ridder.anims.isPlaying)
+    {
+        ridderWalk();
+    }
+
+    console.log('test');
     if (cursors.left.isDown)
     {
+
         ridder.setVelocityX(-800);
         ridder.flipX = true;
     }
@@ -119,24 +140,12 @@ function update() {
 
 //custom made functions ///////////////////////////////////
 function ridderAttack(){
-    var config = {
-        key: 'attack',
-        frames: game.anims.generateFrameNumbers('ridder', { start: 2, end: 7 }),
-        frameRate: 10,
-        repeat: 0
-    };
-    game.anims.create(config);
+
     ridder.anims.play('attack');
 }
 
 function ridderWalk(){
-    var config = {
-        key: 'walk',
-        frames: game.anims.generateFrameNumbers('ridder', { start: 0, end: 1 }),
-        frameRate: 7,
-        repeat: -1
-    };
-    game.anims.create(config);
+
     ridder.anims.play('walk');
 }
  /*
