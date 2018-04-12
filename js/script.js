@@ -8,11 +8,14 @@ const config = {
         update: update
     },
     physics: {
-        default: 'matter',
-        matter: {
-            gravity: {
+        default: 'impact',
+        impact: {
+            setBounds:{
                 x:0,
-                y:0
+                y:0,
+                width:700,
+                height:700,
+                thickness:32
             }
         }
     }
@@ -34,55 +37,32 @@ var squirrel;
 var peasant;
 var cursors;
 var castle;
+var glory;
 
 function create() {
     var bounds = new Phaser.Geom.Circle(100, 100, 400);
-    bounds.matter.setStatic();
     this.add.image(350,350,'ground');
-    castle = this.matter.add.sprite(350,350,'castle').setStatic(true);
-    ridder = this.matter.add.sprite(200,200,'ridder').setBounce(1).setFriction(1);
-    peasant = this.matter.add.sprite(300, 300, 'peasant').setActive().setBounce(1);
-    squirrel = this.matter.add.sprite(250,200,'squirrel').setActive().setBounce(1);
-    
-    // multiple sprites
-    /*
-    for (var i = 0; i < 20; i++){
-        var peasant =  this.add.sprite(100+i*Math.floor((Math.random() * 10) + 1),100+i*Math.floor((Math.random() * 10) + 1),'peasant')
-    }
-    */
-    //  If you don't set the body as active it won't collide with the world bounds
+    castle = this.impact.add.sprite(350,350,'castle');
+    ridder = this.impact.add.sprite(200,200,'ridder').setActive();
+    //peasant = this.matter.add.sprite(300, 300, 'peasant').setActive().setBounce(1);
+    //squirrel = this.matter.add.sprite(250,200,'squirrel').setActive().setBounce(1);
+    ridderWalk();
 
-    var config = {
-        key: 'walk',
-        frames: this.anims.generateFrameNumbers('ridder', { start: 0, end: 1 }),
-        frameRate: 7,
-        repeat: -1,
-        repeatDelay: 0
-    };
-    this.anims.create(config);
 
-    ridder.anims.play('walk');
-
-    //get user input using cursor
     cursors = this.input.keyboard.createCursorKeys();
-
-    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-
-        bodyA.gameObject.setTint(0xff0000);
-        bodyB.gameObject.setTint(0x00ff00);
-
-    });
 }
 
 
 function update() {
     if (cursors.left.isDown)
     {
-        ridder.setVelocityX(-5);
+        ridder.setVelocityX(-800);
+        ridder.flipX = true;
     }
     else if (cursors.right.isDown)
     {
-        ridder.setVelocityX(5);
+        ridder.setVelocityX(800);
+        ridder.flipX = false;
     }
     else
     {
@@ -91,14 +71,45 @@ function update() {
 
     if (cursors.up.isDown)
     {
-        ridder.setVelocityY(-5);
+        ridder.setVelocityY(-800);
     }
     else if (cursors.down.isDown)
     {
-        ridder.setVelocityY(5);
+        ridder.setVelocityY(800);
     }
     else
     {
         ridder.setVelocityY(0);
     }
+    if (cursors.space.isDown )
+    {
+        ridderAttack();
+    }
+    else{}
 }
+
+
+//custom made functions ///////////////////////////////////
+function ridderAttack(){
+    var config = {
+        key: 'attack',
+        frames: game.anims.generateFrameNumbers('ridder', { start: 2, end: 7 }),
+        frameRate: 10,
+        repeat: 0
+    };
+    game.anims.create(config);
+    ridder.anims.play('attack');
+}
+
+function ridderWalk(){
+    var config = {
+        key: 'walk',
+        frames: game.anims.generateFrameNumbers('ridder', { start: 0, end: 1 }),
+        frameRate: 7,
+        repeat: -1
+    };
+    game.anims.create(config);
+    ridder.anims.play('walk');
+}
+
+
