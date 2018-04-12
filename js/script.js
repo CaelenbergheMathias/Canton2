@@ -17,6 +17,9 @@ const config = {
                 height:700,
                 thickness:32
             }
+        },
+        arcade:{
+            debug: false
         }
     }
 };
