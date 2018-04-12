@@ -62,7 +62,8 @@ function create() {
         repeat: -1
     };
     game.anims.create(config);
-    console.log(game)
+    //console.log(this);
+    //console.log(game);
     squirrel = this.physics.add.group({
         key: 'squirrel',
         repeat: amountofsquirrels,
@@ -167,12 +168,30 @@ function ridderAttack() {
 }
 
 function killsquirrel(ridder,s) {
-
+    console.log(game);
     s.disableBody(true,true);
     if(squirrel.countActive(true)===0)
     {
         amountofsquirrels +=5;
+        squirrel = game.scene.scenes[0].physics.add.group({
+            key: 'squirrel',
+            repeat: amountofsquirrels,
+            setXY: { x: 50, y: 50, stepX: 50 }
+        });
 
+        squirrel.children.iterate(function (child) {
+            child.setCollideWorldBounds(true);
+            child.play('randomMovement');
+            child.setVelocity(Phaser.Math.Between(100, 150), Phaser.Math.Between(100, 150));
+            child.setBounce(1);
+            var x = Phaser.Math.Between(50, 650);
+            var y = Phaser.Math.Between(50, 650);
+            child.setX(x);
+            child.setY(y);
+        })
+        this.physics.add.collider(squirrel,castle, damageCastle, null,this);
+        this.physics.add.collider(squirrel,squirrel);
+        this.physics.add.collider(ridder, squirrel, killsquirrel, null, this);
     }
 }
 
