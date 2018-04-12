@@ -23,7 +23,7 @@ const config = {
         }
     }
 };
-
+let amountofsquirrels = 10;
 let game = new Phaser.Game(config);
 
 function preload() {
@@ -46,7 +46,7 @@ function create() {
     //var bounds = new Phaser.Geom.Circle(100, 100, 400);
     this.add.image(350,350,'ground');
     castle = this.physics.add.staticGroup();
-    castle.create(350,350,'castle')
+    castle.create(350,350,'castle');
 
 
     ridder = this.physics.add.sprite(400,400,'ridder');
@@ -62,16 +62,21 @@ function create() {
         repeat: -1
     };
     game.anims.create(config);
+    console.log(game)
     squirrel = this.physics.add.group({
         key: 'squirrel',
-        repeat: 11,
+        repeat: amountofsquirrels,
         setXY: { x: 50, y: 50, stepX: 50 }
     });
     squirrel.children.iterate(function (child) {
         child.setCollideWorldBounds(true);
         child.play('randomMovement')
-        child.setVelocity(Phaser.Math.Between(20, 60), Phaser.Math.Between(20, 60));
+        child.setVelocity(Phaser.Math.Between(100, 150), Phaser.Math.Between(100, 150));
         child.setBounce(1);
+        var x = Phaser.Math.Between(50, 650);
+        var y = Phaser.Math.Between(50, 650);
+        child.setX(x);
+        child.setY(y);
     })
     /*for (var i = 0; i < 10; i++)
     {
@@ -124,11 +129,11 @@ function update() {
     if (cursors.left.isDown)
     {
 
-        ridder.setVelocityX(-400);
+        ridder.setVelocityX(-200);
         ridder.flipX = true;
     }
     else if (cursors.right.isDown) {
-        ridder.setVelocityX(400);
+        ridder.setVelocityX(200);
         ridder.flipX = false;
     }
     else {
@@ -136,10 +141,10 @@ function update() {
     }
 
     if (cursors.up.isDown) {
-        ridder.setVelocityY(-400);
+        ridder.setVelocityY(-200);
     }
     else if (cursors.down.isDown) {
-        ridder.setVelocityY(400);
+        ridder.setVelocityY(200);
     }
     else {
         ridder.setVelocityY(0);
@@ -161,17 +166,23 @@ function ridderAttack() {
     ridder.anims.play('attack');
 }
 
-function killsquirrel(ridder,squirrel) {
-    squirrel.disableBody(true,true);
+function killsquirrel(ridder,s) {
+
+    s.disableBody(true,true);
+    if(squirrel.countActive(true)===0)
+    {
+        amountofsquirrels +=5;
+
+    }
 }
 
 function damageCastle(squirrel,castle) {
-    castlehealth -= 100;
+    castlehealth -= 5;
     healthtext.setText('health: '+castlehealth)
     if(castlehealth<=0)
     {
         castle.anims.play('gameover');
-        
+
 
     }
 
